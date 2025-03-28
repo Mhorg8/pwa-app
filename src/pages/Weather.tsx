@@ -10,25 +10,23 @@ interface Location {
 }
 
 const WeatherPage = () => {
+  const [error, setError] = useState<string | null>(null);
   const [location, setLocation] = useState<Location>({
     city: null,
     country: null,
     loc: null,
   });
 
-  const [error, setError] = useState<string | null>(null);
-
   async function getCurrentLocation() {
     try {
       const response = await fetch(
-        `https://ipinfo.io/json?token=${process.env.GEOLOCATION_API_KEY}`
+        `https://ipinfo.io/json?token=8461a4291e36f7`
       );
       const data = await response.json();
-
       setLocation({
-        loc: data.loc,
         city: data.city,
         country: data.country,
+        loc: data.loc,
       });
     } catch (err) {
       console.error(err);
@@ -36,9 +34,26 @@ const WeatherPage = () => {
     }
   }
 
+  async function getWeatherDetail() {
+    if (location.loc) {
+      const [lat, lon] = location.loc.split(",");
+
+      const response = await fetch(`
+        https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&appid=1399b4e72604b09f14d6522be3095722`);
+      const data = await response.json();
+      console.log(data);
+    }
+  }
+
   useEffect(() => {
     getCurrentLocation();
   }, []);
+
+  useEffect(() => {
+    if (location) {
+      getWeatherDetail();
+    }
+  }, [location]);
 
   return (
     <div className="wrapper">
