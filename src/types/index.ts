@@ -3,6 +3,11 @@ export interface NavLink {
   text: string;
   path: string;
 }
+export interface Location {
+  city: null | string;
+  country: null | string;
+  loc: null | string;
+}
 
 export interface Weather {
   coord: {

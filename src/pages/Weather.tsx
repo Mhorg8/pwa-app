@@ -1,19 +1,15 @@
 import TemperatureView from "../components/weather/TemperatureView";
 import SearchLocation from "../components/weather/SearchLocation";
 import { useEffect, useState } from "react";
-import { IoLocationOutline } from "react-icons/io5";
-import { Weather } from "../types";
+import { Location, Weather } from "../types";
 import { useSearchParams } from "react-router-dom";
-
-interface Location {
-  city: null | string;
-  country: null | string;
-  loc: null | string;
-}
+import WeatherLocation from "../components/weather/WeatherLocation";
 
 const WeatherPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [weather, setWeather] = useState<Weather | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<number>(0);
+
   const [searchParams] = useSearchParams();
   const query = searchParams.get("location");
 
@@ -46,11 +42,12 @@ const WeatherPage = () => {
   async function getWeatherDetail() {
     try {
       if (location.loc || query) {
+        // destrachring lat and log form location
         const [lat, lon] = location.loc ? location.loc.split(",") : [];
         const API_KEY = "1399b4e72604b09f14d6522be3095722";
         const getWeatherByCity = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${API_KEY}&units=metric`;
         const getWeatherByCurrentLocation = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
-
+        // fetcing data conditionaly when have query or NOT
         const response = await fetch(
           query ? getWeatherByCity : getWeatherByCurrentLocation
         );
@@ -75,27 +72,17 @@ const WeatherPage = () => {
     }
   }, [location, query]);
 
-  if (!weather) {
-    <div>LOading</div>;
-  }
-
   return (
     <div className="wrapper">
       <div className="flex flex-col items-center justify-center gap-y-10">
         <SearchLocation />
-        <div className="">
-          <div className="flex  items-center gap-1">
-            <span className="text-sm text-dark-gray">Current location</span>
-            <IoLocationOutline />
-          </div>
-          <h3 className="text-4xl font-light tracking-wider">
-            {query ? query : location.city || "Fetching location..."}
-          </h3>
-
-          {error && <p className="text-red-500">{error}</p>}
-        </div>
+        <WeatherLocation
+          location={location}
+          currentLocation={currentLocation}
+          setCurrentLocation={setCurrentLocation}
+        />
+        {error && <p className="text-red-500">{error}</p>}
         <TemperatureView weather={weather} />
-
         {weather && (
           <div className="flex items-center justify-center gap-10">
             <div className="flex flex-col items-center justify-center gap-3">
