@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Location, Weather } from "../types";
 import { useSearchParams } from "react-router-dom";
 import WeatherLocation from "../components/weather/WeatherLocation";
+import WeatherInformation from "../components/weather/WeatherInformation";
 
 const WeatherPage = () => {
   const [error, setError] = useState<string | null>(null);
@@ -83,25 +84,7 @@ const WeatherPage = () => {
         />
         {error && <p className="text-red-500">{error}</p>}
         <TemperatureView weather={weather} />
-        {weather && (
-          <div className="flex items-center justify-center gap-10">
-            <div className="flex flex-col items-center justify-center gap-3">
-              <h5 className="text-2xl font-light tracking-wide">TODAY</h5>
-              <div className="bg-red-200 h-10 w-10 "></div>
-              <div className="flex items-center gap-3 text-2xl font-light tracking-wide">
-                <div className="flex items-end font-light">
-                  <p>{weather.main.temp_min.toFixed(0)}</p>{" "}
-                  <span className="text-base">°C</span>
-                </div>
-                |
-                <div className="flex items-end font-light">
-                  <p>{weather.main.temp_max.toFixed(0)}</p>{" "}
-                  <span className="text-base">°C</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {weather && <WeatherInformation weather={weather} />}
       </div>
     </div>
   );
