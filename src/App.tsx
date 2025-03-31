@@ -5,6 +5,7 @@ import NotfoundPage from "./pages/Notfound";
 import SigninPage from "./pages/SIgnin";
 import HomePage from "./pages/Home";
 import WeatherPage from "./pages/Weather";
+import TimerPage from "./pages/Timer";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -29,6 +30,11 @@ const App = () => {
         {
           path: "/weather",
           element: <WeatherPage />,
+          errorElement: <NotfoundPage />,
+        },
+        {
+          path: "/timer",
+          element: <TimerPage />,
           errorElement: <NotfoundPage />,
         },
       ],

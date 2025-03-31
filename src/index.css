@@ -2,15 +2,31 @@
 
 @utility container {
   width: 100%;
-  margin: 0px auto;
+  margin: 0 auto;
   padding: 0 32px;
 }
+
 @layer components {
   .hoverEffect {
     @apply transition-all duration-300;
   }
   .wrapper {
     @apply w-[100dvw] h-[calc(100dvh-60px)] flex items-center justify-center;
+  }
+  .timer {
+    @apply border-[4px] border-zinc-200 border-t-blue-400 rounded-full;
+    animation: spin-border 1s linear infinite;
+  }
+}
+
+@keyframes spin-border {
+  0% {
+    border-top-color: blue;
+    transform: rotate(0deg);
+  }
+  100% {
+    border-top-color: blue;
+    transform: rotate(360deg);
   }
 }
 

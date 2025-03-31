@@ -83,7 +83,7 @@ const WeatherPage = () => {
           setCurrentLocation={setCurrentLocation}
         />
         {error && <p className="text-red-500">{error}</p>}
-        <TemperatureView weather={weather} />
+        <TemperatureView weather={weather as Weather} />
         {weather && <WeatherInformation weather={weather} />}
       </div>
     </div>
