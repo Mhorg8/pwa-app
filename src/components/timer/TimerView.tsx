@@ -1,6 +1,6 @@
 import { LuPencil, LuX } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
-import { decrementTime } from "../../libs/redux/timer/timerSlice";
+import { updateMinute } from "../../libs/redux/timer/timerSlice";
 import { useRef, useState } from "react";
 import { RootState } from "../../store";
 
@@ -20,26 +20,27 @@ const TimerView = () => {
     const targetValue = Number(e.currentTarget.value);
     if (e.key === "Enter") {
       processTime.current = targetValue;
-      dispatch(decrementTime());
+      dispatch(updateMinute(time));
       setEditFlag(false);
     }
   }
 
   return (
-    <div className="w-full h-[80%] flex items-center justify-center border-y-1 relative">
+    <div className="w-full h-[80%] flex items-center justify-center  relative">
       <div className="absolute top-6 right-0 flex w-full gap-3 justify-between">
         {editFlag ? (
           <div className="flex items-center gap-2 w-full">
             <input
               onChange={(e) => setTime(Number(e.currentTarget.value))}
               value={time}
+              min={1}
               onKeyDown={handleUpdateTime}
               type="number"
-              className="w-full bg-soft-gray/70 rounded-sm py-2 px-2 flex-1"
+              className="w-full bg-soft-gray rounded-sm py-2 px-2 flex-1"
             />
             <button
               title="Close edit input"
-              className="cursor-pointer"
+              className="cursor-pointer bg-white"
               onClick={() => setEditFlag(false)}
             >
               <LuX size={24} />
@@ -48,13 +49,13 @@ const TimerView = () => {
         ) : (
           <button
             onClick={() => setEditFlag(true)}
-            className="flex items-center justify-center p-3 rounded-full cursor-pointer hover:bg-soft-gray border border-zinc-400"
+            className=" flex items-center justify-center p-3 rounded-full cursor-pointer hover:bg-soft-gray border border-zinc-400"
           >
             <LuPencil />
           </button>
         )}
       </div>
-      <h2 className="text-6xl font-bold ">
+      <h2 className="text-9xl font-bold ">
         {handleZeroToTimer(minute)}:{handleZeroToTimer(second)}
       </h2>
     </div>

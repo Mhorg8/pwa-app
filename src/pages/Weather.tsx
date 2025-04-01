@@ -75,7 +75,7 @@ const WeatherPage = () => {
 
   return (
     <div className="wrapper">
-      <div className="flex flex-col items-center justify-center gap-y-10">
+      <div className="flex flex-col items-center justify-center gap-y-10 bg-zinc-100 p-3 rounded-md">
         <SearchLocation />
         <WeatherLocation
           location={location}

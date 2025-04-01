@@ -4,13 +4,15 @@ interface TimerState {
   minute: number;
   second: number;
   isRunning: boolean;
+  initialTotalSeconds: number;
   processPercentage: number;
   interval: NodeJS.Timeout | null;
 }
 
 const initialState: TimerState = {
-  minute: 5,
+  minute: 0,
   second: 0,
+  initialTotalSeconds: 0,
   isRunning: false,
   processPercentage: 100,
   interval: null,
@@ -31,6 +33,8 @@ export const timerSlice = createSlice({
 
     startTimer: (state) => {
       state.isRunning = true;
+      // Set initial total seconds only when the timer starts
+      state.initialTotalSeconds = state.minute * 60 + state.second;
     },
 
     pauseTimer: (state) => {
@@ -39,19 +43,19 @@ export const timerSlice = createSlice({
 
     // Resset everything to defualt
     resetTimer: (state) => {
-      state.minute = 5;
+      state.minute = 0;
       state.second = 0;
       state.isRunning = false;
       state.processPercentage = 100;
     },
 
     decrementTime: (state) => {
-      // Check if minute is ZERO or second is ZERO return
       if (state.minute === 0 && state.second === 0) {
         state.isRunning = false;
+        state.processPercentage = 0;
         return;
       }
-      // DEcrement second and minute
+
       if (state.second > 0) {
         state.second -= 1;
       } else if (state.minute > 0) {
@@ -59,10 +63,13 @@ export const timerSlice = createSlice({
         state.second = 59;
       }
 
-      // Update process percentage
-      const totalSeconds = 5 * 60;
+      // Ensure we use the initially stored total seconds
       const remainingSeconds = state.minute * 60 + state.second;
-      state.processPercentage = (remainingSeconds / totalSeconds) * 100;
+      state.processPercentage = Math.floor(
+        (remainingSeconds / state.initialTotalSeconds) * 100
+      );
+
+      console.log(state.processPercentage);
     },
   },
 });
